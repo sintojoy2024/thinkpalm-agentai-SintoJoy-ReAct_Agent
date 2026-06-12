@@ -73,7 +73,7 @@ The iframe preview renders a full **dark maritime operations dashboard** — nav
 ### Setup
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/bridgeview-ai.git
+git clone https://github.com/sintojoy2024/thinkpalm-agentai-SintoJoy-ReAct_Agent
 cd bridgeview-ai
 
 npm install

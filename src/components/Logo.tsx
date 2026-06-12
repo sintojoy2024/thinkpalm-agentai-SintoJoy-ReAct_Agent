@@ -15,7 +15,7 @@ export default function Logo({ size = 40, className = "" }: LogoProps) {
       className={className}
       aria-hidden
     >
-      <rect width="32" height="32" rx="7" fill="#0284c7" />
+      <rect width="32" height="32" rx="7" fill="#2563eb" />
       <g
         transform="translate(4, 4)"
         stroke="#ffffff"

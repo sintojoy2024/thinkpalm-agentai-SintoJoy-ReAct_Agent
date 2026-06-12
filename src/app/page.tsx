@@ -13,6 +13,9 @@ import ExportActions from "@/components/ExportActions";
 import ThemeToggle from "@/components/ThemeToggle";
 import StatusBar from "@/components/StatusBar";
 import PipelineColumn from "@/components/PipelineColumn";
+import OnboardingWalkthrough, { restartOnboarding } from "@/components/OnboardingWalkthrough";
+import TourButton from "@/components/TourButton";
+import { ONBOARDING_STORAGE_KEY } from "@/data/onboarding-steps";
 import type { AgentLogEntry, PipelineResult, PipelineStage } from "@/types";
 import { PRD_TEMPLATES, type PRDTemplate } from "@/data/prd-templates";
 import { runPipelineStream } from "@/lib/pipeline-client";
@@ -31,10 +34,21 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<Tab>("preview");
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [showTour, setShowTour] = useState(false);
 
   useEffect(() => {
     setSessionId(crypto.randomUUID());
+    const completed = localStorage.getItem(ONBOARDING_STORAGE_KEY);
+    if (!completed) {
+      const t = setTimeout(() => setShowTour(true), 800);
+      return () => clearTimeout(t);
+    }
   }, []);
+
+  const startTour = () => {
+    restartOnboarding();
+    setShowTour(true);
+  };
 
   const isLoading = stage !== "idle" && stage !== "complete" && stage !== "error";
 
@@ -89,11 +103,11 @@ export default function Home() {
   ];
 
   const generateFooter = (
-    <div className="p-4">
+    <div className="p-4" data-tour="generate-btn">
       <button
         onClick={handleGenerate}
         disabled={isLoading || prdText.trim().length < 50}
-        className="flex flex-col items-center justify-center gap-1 w-full px-4 py-3.5 bg-gradient-to-r from-maritime-600 to-cyan-500 text-white rounded-xl font-semibold hover:from-maritime-700 hover:to-cyan-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-maritime-900/30"
+        className="flex flex-col items-center justify-center gap-1 w-full px-4 py-3.5 btn-brand rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-[var(--shadow-md)]"
       >
         <span className="flex items-center gap-2">
           {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
@@ -114,7 +128,7 @@ export default function Home() {
             <Logo size={36} className="shadow-sm shadow-maritime-900/20 rounded-lg shrink-0" />
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 text-[10px] text-[var(--text-muted)] mb-0.5">
-                <span className="font-medium text-maritime-600 dark:text-maritime-400">BridgeView AI</span>
+                <span className="font-medium text-[var(--brand)]">BridgeView AI</span>
                 <ChevronRight className="w-3 h-3" />
                 <span>Dashboard Generator</span>
               </div>
@@ -123,7 +137,10 @@ export default function Home() {
               </h1>
             </div>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <TourButton onStart={startTour} />
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
@@ -137,7 +154,8 @@ export default function Home() {
           bodyClassName="p-4"
           footer={generateFooter}
         >
-          <PRDInput
+          <div data-tour="prd-input">
+            <PRDInput
             value={prdText}
             onChange={(text) => {
               setPrdText(text);
@@ -154,6 +172,7 @@ export default function Home() {
             compact
             hideGenerateButton
           />
+          </div>
         </PipelineColumn>
 
         {/* Column 2 — AGENTS */}
@@ -163,6 +182,7 @@ export default function Home() {
           subtitle="Orchestration & activity"
           bodyClassName="p-4"
         >
+          <div data-tour="agents">
           <AgentPipeline
             stage={stage}
             progressMessage={progressMessage}
@@ -176,13 +196,14 @@ export default function Home() {
               {error}
             </div>
           )}
+          </div>
         </PipelineColumn>
 
         {/* Column 3 — OUTPUT */}
-        <div className="flex flex-col min-h-0 min-w-0">
-          <div className="shrink-0 px-4 py-3 border-b border-[var(--border)] bg-[var(--card-bg)]/80">
+        <div className="flex flex-col min-h-0 min-w-0 column-surface">
+          <div className="shrink-0 px-4 py-3 border-b border-[var(--border)] bg-[var(--background)]">
             <div className="flex items-center gap-2 mb-2">
-              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-maritime-600/20 text-maritime-600 dark:text-maritime-400 text-xs font-bold">
+              <span className="flex items-center justify-center w-6 h-6 rounded-md bg-[var(--brand-muted)] text-[var(--brand)] text-xs font-bold">
                 3
               </span>
               <div>
@@ -190,15 +211,15 @@ export default function Home() {
                 <p className="text-[10px] text-[var(--text-muted)]">Deliverables & export</p>
               </div>
             </div>
-            <div className="flex gap-1 p-1 rounded-lg bg-[var(--card-bg-muted)] border border-[var(--border-subtle)]">
+            <div className="flex border-b border-[var(--border)]" data-tour="output-tabs">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium rounded-md transition-colors ${
+                  className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 text-xs font-medium transition-colors border-b-2 -mb-px ${
                     activeTab === tab.id
-                      ? "bg-[var(--card-bg)] text-maritime-600 dark:text-maritime-300 shadow-sm"
-                      : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                      ? "text-[var(--brand)] border-[var(--brand)] bg-[var(--background)]"
+                      : "text-[var(--text-muted)] border-transparent hover:text-[var(--text-primary)]"
                   }`}
                 >
                   {tab.icon}
@@ -237,6 +258,8 @@ export default function Home() {
       </main>
 
       <StatusBar sessionId={sessionId} stage={stage} />
+
+      <OnboardingWalkthrough open={showTour} onClose={() => setShowTour(false)} />
     </div>
   );
 }

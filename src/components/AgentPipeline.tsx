@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Search, Layout, Code2, CheckCircle2, Loader2, Circle } from "lucide-react";
 import type { PipelineStage } from "@/types";
 
@@ -9,7 +9,7 @@ const AGENTS = [
     name: "PRD Analyzer",
     icon: Search,
     stage: "analyzing" as PipelineStage,
-    description: "Extracts requirements, identifies key features, and searches the component catalog.",
+    description: "Extracts requirements and maps key features from your PRD.",
   },
   {
     name: "UI Architect",
@@ -94,22 +94,10 @@ export default function AgentPipeline({
 
   const statusBadge = (status: AgentStatus) => {
     if (status === "completed")
-      return (
-        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-accent-success/15 text-accent-success border border-accent-success/25">
-          Completed
-        </span>
-      );
+      return <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full badge-success">Completed</span>;
     if (status === "running")
-      return (
-        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-accent-amber/15 text-accent-amber border border-accent-amber/25">
-          In Progress
-        </span>
-      );
-    return (
-      <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[var(--card-bg-muted)] text-[var(--text-muted)] border border-[var(--border)]">
-        Waiting
-      </span>
-    );
+      return <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full badge-progress">In Progress</span>;
+    return <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full badge-waiting">Waiting</span>;
   };
 
   return (
@@ -121,7 +109,7 @@ export default function AgentPipeline({
         </p>
       )}
 
-      <div className="relative">
+      <div className="flex flex-col">
         {AGENTS.map((agent, i) => {
           const status = getAgentStatus(stage, agent.stage);
           const progress = getAgentProgress(stage, agent.stage);
@@ -130,26 +118,27 @@ export default function AgentPipeline({
           const timeLabel = formatTime(startedAt);
 
           return (
-            <div key={agent.name} className="relative">
+            <Fragment key={agent.name}>
               {i > 0 && (
-                <div className="absolute left-[19px] -top-3 w-0.5 h-3 bg-[var(--border)]" aria-hidden />
+                <div className="flex h-3" aria-hidden>
+                  <div className="w-10 shrink-0 flex justify-center">
+                    <div
+                      className={`w-0.5 h-full transition-colors duration-300 ${
+                        status !== "waiting" ? "bg-[var(--brand)]" : "bg-[var(--border)]"
+                      }`}
+                    />
+                  </div>
+                </div>
               )}
-              <div
-                className={`relative mb-3 last:mb-0 p-3 rounded-xl border transition-all ${
-                  status === "running"
-                    ? "border-maritime-500/60 bg-maritime-950/30 ring-1 ring-maritime-500/30"
-                    : status === "completed"
-                      ? "border-accent-success/25 bg-accent-success/5"
-                      : "border-[var(--border-subtle)] bg-[var(--card-bg-muted)]/50"
-                }`}
-              >
-                <div className="flex items-start gap-3">
+
+              <div className="flex gap-3 items-center">
+                <div className="w-10 shrink-0 flex justify-center">
                   <div
-                    className={`shrink-0 w-10 h-10 rounded-xl flex items-center justify-center ${
+                    className={`relative z-10 shrink-0 w-10 h-10 rounded-xl flex items-center justify-center ring-4 ring-[var(--column-bg)] ${
                       status === "completed"
-                        ? "bg-accent-success/15 text-accent-success"
+                        ? "bg-[var(--success-bg)] text-[var(--success-text)]"
                         : status === "running"
-                          ? "bg-maritime-600/20 text-maritime-400"
+                          ? "bg-[var(--progress-bg)] text-[var(--brand)]"
                           : "bg-[var(--card-bg-muted)] text-[var(--text-muted)]"
                     }`}
                   >
@@ -161,47 +150,45 @@ export default function AgentPipeline({
                       <Circle className="w-5 h-5" />
                     )}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
-                      <div className="flex items-center gap-2 min-w-0">
-                        <Icon className="w-4 h-4 text-[var(--text-muted)] shrink-0" />
-                        <span className="text-sm font-semibold text-[var(--text-primary)]">{agent.name}</span>
-                      </div>
-                      {statusBadge(status)}
-                    </div>
-                    {timeLabel && (
-                      <p className="text-[10px] text-[var(--text-muted)] mb-1.5">{timeLabel}</p>
-                    )}
-                    <p className="text-xs text-[var(--text-muted)] leading-relaxed">{agent.description}</p>
-                    {status === "running" && (
-                      <div className="mt-3">
-                        <div className="flex justify-between text-[10px] text-[var(--text-muted)] mb-1">
-                          <span>Progress</span>
-                          <span className="font-mono">{progress}%</span>
-                        </div>
-                        <div className="w-full h-1.5 bg-[var(--border)] rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-gradient-to-r from-maritime-600 to-maritime-400 rounded-full transition-all duration-700"
-                            style={{ width: `${progress}%` }}
-                          />
-                        </div>
-                      </div>
-                    )}
+                </div>
+
+                <div
+                  className={`flex-1 min-w-0 p-3 rounded-xl border transition-all shadow-[var(--shadow-sm)] ${
+                  status === "running"
+                    ? "border-[var(--progress-border)] bg-[var(--card-bg)] ring-1 ring-[var(--brand-light)]"
+                    : status === "completed"
+                      ? "border-[var(--success-border)] bg-[var(--card-bg)]"
+                      : "border-[var(--border)] bg-[var(--card-bg)]"
+                }`}
+              >
+                <div className="flex items-center justify-between gap-2 flex-wrap mb-1">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <Icon className="w-4 h-4 text-[var(--text-muted)] shrink-0" />
+                    <span className="text-sm font-semibold text-[var(--text-primary)]">{agent.name}</span>
                   </div>
+                  {statusBadge(status)}
+                </div>
+                {timeLabel && (
+                  <p className="text-[10px] text-[var(--text-muted)] mb-1.5">{timeLabel}</p>
+                )}
+                <p className="text-xs text-[var(--text-muted)] leading-relaxed">{agent.description}</p>
+                {status === "running" && (
+                  <div className="mt-3">
+                    <div className="flex justify-between text-[10px] text-[var(--text-muted)] mb-1">
+                      <span>Progress</span>
+                      <span className="font-mono">{progress}%</span>
+                    </div>
+                    <div className="w-full h-1.5 bg-[var(--card-bg-muted)] rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-[var(--brand)] rounded-full transition-all duration-700"
+                        style={{ width: `${progress}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
                 </div>
               </div>
-              {i < AGENTS.length - 1 && (
-                <div className="flex justify-center mb-1">
-                  <div
-                    className={`w-0.5 h-4 rounded-full ${
-                      getAgentStatus(stage, AGENTS[i + 1].stage) !== "waiting"
-                        ? "bg-maritime-500"
-                        : "bg-[var(--border)]"
-                    }`}
-                  />
-                </div>
-              )}
-            </div>
+            </Fragment>
           );
         })}
       </div>

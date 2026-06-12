@@ -48,7 +48,7 @@ export default function PRDInput({
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center gap-2 mb-3">
-        <FileText className="w-4 h-4 text-maritime-600" />
+        <FileText className="w-4 h-4 text-[var(--brand)]" />
         <h2 className="text-sm font-display font-semibold text-[var(--text-primary)]">Maritime PRD Input</h2>
       </div>
 
@@ -64,7 +64,7 @@ export default function PRDInput({
         onChange={(e) => onChange(e.target.value.slice(0, MAX_CHARS))}
         disabled={isLoading}
         placeholder="Paste your maritime product requirements document here..."
-        className="flex-1 w-full p-3 border border-[var(--border)] rounded-xl resize-none focus:ring-2 focus:ring-maritime-500 focus:border-transparent disabled:opacity-60 font-mono text-xs leading-relaxed min-h-[120px] bg-[var(--input-bg)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)]"
+        className="flex-1 w-full p-3 border border-[var(--border)] rounded-lg resize-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent disabled:opacity-60 font-mono text-xs leading-relaxed min-h-[120px] bg-[var(--input-bg)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] shadow-[var(--shadow-sm)]"
         rows={compact ? 8 : 12}
       />
 

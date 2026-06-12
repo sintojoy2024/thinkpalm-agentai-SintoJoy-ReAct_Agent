@@ -16,17 +16,17 @@ export default function StatusBar({ sessionId, stage }: StatusBarProps) {
       <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between gap-4 text-[11px] font-mono text-[var(--text-muted)]">
         <div className="flex items-center gap-3 flex-wrap">
           <span className="flex items-center gap-1.5">
-            <Cpu className="w-3 h-3 text-maritime-500" />
+            <Cpu className="w-3 h-3 text-[var(--brand)]" />
             Groq
           </span>
           <span className="text-[var(--border)]">·</span>
           <span className="flex items-center gap-1.5">
-            <Bot className="w-3 h-3 text-maritime-500" />
+            <Bot className="w-3 h-3 text-[var(--brand)]" />
             3 agents
           </span>
           <span className="text-[var(--border)]">·</span>
           <span>
-            Session <span className="text-maritime-600 dark:text-maritime-400">#{shortSession}</span>
+            Session <span className="text-[var(--brand)]">#{shortSession}</span>
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -37,7 +37,10 @@ export default function StatusBar({ sessionId, stage }: StatusBarProps) {
             </span>
           )}
           {stage === "complete" && (
-            <span className="text-accent-success font-medium">Ready</span>
+            <span className="flex items-center gap-1.5 text-[var(--success-text)] font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--success)]" />
+              Ready
+            </span>
           )}
           <span className="hidden sm:inline text-[var(--text-muted)]">BridgeView AI</span>
         </div>

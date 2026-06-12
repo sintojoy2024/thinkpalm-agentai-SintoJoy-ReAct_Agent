@@ -3,29 +3,41 @@
 @tailwind utilities;
 
 :root {
-  --background: #f8fafc;
+  --background: #ffffff;
+  --column-bg: #f8fafc;
   --foreground: #0f172a;
-  --page-from: #e8f4fc;
-  --page-via: #ffffff;
-  --page-to: #f0f9ff;
   --card-bg: #ffffff;
-  --card-bg-muted: #f9fafb;
-  --border: #e5e7eb;
-  --border-subtle: #f3f4f6;
+  --card-bg-muted: #f1f5f9;
+  --border: #e2e8f0;
+  --border-subtle: #f1f5f9;
   --text-primary: #0f172a;
-  --text-secondary: #374151;
-  --text-muted: #6b7280;
-  --status-bar-bg: rgba(255, 255, 255, 0.85);
-  --preview-chrome: #f3f4f6;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --brand: #2563eb;
+  --brand-hover: #1d4ed8;
+  --brand-muted: #eff6ff;
+  --brand-light: #dbeafe;
+  --success: #16a34a;
+  --success-bg: #dcfce7;
+  --success-border: #bbf7d0;
+  --success-text: #166534;
+  --progress-bg: #dbeafe;
+  --progress-border: #bfdbfe;
+  --progress-text: #1e40af;
+  --waiting-bg: #f8fafc;
+  --waiting-text: #64748b;
+  --status-bar-bg: #ffffff;
+  --preview-chrome: #f1f5f9;
   --input-bg: #ffffff;
+  --shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.04);
+  --shadow-md: 0 4px 12px -2px rgb(15 23 42 / 0.08);
+  --shadow-card: 0 1px 3px 0 rgb(15 23 42 / 0.06), 0 1px 2px -1px rgb(15 23 42 / 0.06);
 }
 
 .dark {
   --background: #0f172a;
+  --column-bg: #0f172a;
   --foreground: #f1f5f9;
-  --page-from: #0a1628;
-  --page-via: #0f172a;
-  --page-to: #082f49;
   --card-bg: #1e293b;
   --card-bg-muted: #334155;
   --border: #334155;
@@ -33,9 +45,25 @@
   --text-primary: #f1f5f9;
   --text-secondary: #cbd5e1;
   --text-muted: #94a3b8;
-  --status-bar-bg: rgba(15, 23, 42, 0.9);
+  --brand: #3b82f6;
+  --brand-hover: #2563eb;
+  --brand-muted: #1e3a5f;
+  --brand-light: #1e40af;
+  --success: #22c55e;
+  --success-bg: rgba(34, 197, 94, 0.12);
+  --success-border: rgba(34, 197, 94, 0.25);
+  --success-text: #4ade80;
+  --progress-bg: rgba(59, 130, 246, 0.15);
+  --progress-border: rgba(59, 130, 246, 0.3);
+  --progress-text: #93c5fd;
+  --waiting-bg: #1e293b;
+  --waiting-text: #94a3b8;
+  --status-bar-bg: rgba(15, 23, 42, 0.95);
   --preview-chrome: #1e293b;
   --input-bg: #0f172a;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.2);
+  --shadow-md: 0 4px 12px -2px rgb(0 0 0 / 0.35);
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.25);
 }
 
 body {
@@ -54,9 +82,41 @@ body {
 
 @layer components {
   .panel {
-    @apply rounded-xl border shadow-sm;
+    @apply rounded-xl border;
     background-color: var(--card-bg);
     border-color: var(--border);
+    box-shadow: var(--shadow-card);
+  }
+
+  .column-surface {
+    background-color: var(--column-bg);
+  }
+
+  .btn-brand {
+    background-color: var(--brand);
+    color: #ffffff;
+  }
+
+  .btn-brand:hover:not(:disabled) {
+    background-color: var(--brand-hover);
+  }
+
+  .badge-success {
+    background-color: var(--success-bg);
+    color: var(--success-text);
+    border: 1px solid var(--success-border);
+  }
+
+  .badge-progress {
+    background-color: var(--progress-bg);
+    color: var(--progress-text);
+    border: 1px solid var(--progress-border);
+  }
+
+  .badge-waiting {
+    background-color: var(--waiting-bg);
+    color: var(--waiting-text);
+    border: 1px solid var(--border);
   }
 
   .text-primary {
@@ -75,26 +135,6 @@ body {
 
   .animate-pipeline-shimmer {
     animation: pipeline-shimmer 1.5s ease-in-out infinite;
-  }
-
-  .page-gradient {
-    background: linear-gradient(
-      to bottom right,
-      var(--page-from),
-      var(--page-via),
-      var(--page-to)
-    );
-  }
-
-  .pipeline-grid {
-    display: grid;
-    grid-template-columns: minmax(240px, 25%) minmax(280px, 35%) 1fr;
-  }
-
-  @media (max-width: 1023px) {
-    .pipeline-grid {
-      grid-template-columns: 1fr;
-    }
   }
 }
 

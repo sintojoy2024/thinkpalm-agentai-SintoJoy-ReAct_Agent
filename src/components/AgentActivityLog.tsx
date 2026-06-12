@@ -21,7 +21,7 @@ export default function AgentActivityLog({ agentLog, stage, compact = false }: A
   return (
     <div className={compact ? "mt-4" : "panel p-4 w-full"}>
       <div className="flex items-center gap-2 mb-2">
-        <Activity className="w-4 h-4 text-maritime-500" />
+        <Activity className="w-4 h-4 text-[var(--brand)]" />
         <h3 className="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">
           Agent Activity Log
         </h3>
@@ -34,11 +34,11 @@ export default function AgentActivityLog({ agentLog, stage, compact = false }: A
       </div>
 
       {agentLog.length === 0 ? (
-        <p className="text-xs text-[var(--text-muted)] italic py-4 text-center rounded-lg border border-dashed border-[var(--border)]">
+        <p className="text-xs text-[var(--text-muted)] italic py-4 text-center rounded-lg border border-dashed border-[var(--border)] bg-[var(--card-bg)]">
           {isRunning ? "Waiting for agent events…" : "Activity streams here during generation"}
         </p>
       ) : (
-        <div className="max-h-48 overflow-y-auto space-y-2 scrollbar-thin rounded-lg border border-[var(--border-subtle)] bg-[var(--card-bg-muted)]/50 p-2">
+        <div className="max-h-48 overflow-y-auto space-y-2 scrollbar-thin rounded-lg border border-[var(--border)] bg-[var(--card-bg)] shadow-[var(--shadow-sm)] p-2">
           {agentLog.map((entry, i) => {
             const isLatest = i === agentLog.length - 1;
             const isActive = isLatest && isRunning;

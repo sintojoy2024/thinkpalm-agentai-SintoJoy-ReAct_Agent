@@ -130,7 +130,7 @@ export default function LivePreview({
               onClick={() => setViewport(id)}
               className={`flex items-center gap-1 px-2.5 py-1 text-xs rounded-md transition-colors ${
                 viewport === id
-                  ? "bg-[var(--card-bg)] shadow-sm text-maritime-700 dark:text-maritime-300 font-medium"
+                  ? "bg-[var(--card-bg)] shadow-sm text-[var(--brand)] font-medium"
                   : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
               }`}
             >
@@ -144,7 +144,7 @@ export default function LivePreview({
 
       <div
         ref={containerRef}
-        className="flex-1 flex justify-center rounded-xl overflow-hidden border border-[var(--border)] min-h-[280px] bg-[var(--preview-chrome)] shadow-inner"
+        className="flex-1 flex justify-center rounded-xl overflow-hidden border border-[var(--border)] min-h-[280px] bg-[var(--preview-chrome)] shadow-[var(--shadow-md)]"
       >
         <div
           className="relative h-full transition-all duration-300 ease-in-out shrink-0 p-3 sm:p-4"

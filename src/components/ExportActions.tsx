@@ -111,7 +111,7 @@ export default function ExportActions({
   };
 
   return (
-    <div className="shrink-0 p-4 border-t border-[var(--border)] bg-[var(--card-bg-muted)]/50">
+    <div className="shrink-0 p-4 border-t border-[var(--border)] bg-[var(--background)]" data-tour="export-actions">
       <p className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-muted)] mb-3">
         Export &amp; Integrate
       </p>
@@ -120,12 +120,12 @@ export default function ExportActions({
           type="button"
           onClick={handleExportReact}
           disabled={!hasOutput || reactLoading}
-          className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] hover:border-maritime-500/50 hover:bg-maritime-950/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-center"
+          className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] shadow-[var(--shadow-sm)] hover:border-[var(--brand-light)] hover:bg-[var(--brand-muted)] transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-center"
         >
           {reactLoading ? (
-            <Loader2 className="w-5 h-5 text-maritime-500 animate-spin" />
+            <Loader2 className="w-5 h-5 text-[var(--brand)] animate-spin" />
           ) : (
-            <Sparkles className="w-5 h-5 text-maritime-500" />
+            <Sparkles className="w-5 h-5 text-[var(--brand)]" />
           )}
           <span className="text-[11px] font-medium text-[var(--text-primary)]">Export React</span>
           <span className="text-[9px] text-[var(--text-muted)]">Tailwind</span>
@@ -134,7 +134,7 @@ export default function ExportActions({
           type="button"
           onClick={handleExportFigma}
           disabled={!hasOutput || figmaLoading}
-          className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] hover:border-purple-500/50 hover:bg-purple-950/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-center"
+          className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] shadow-[var(--shadow-sm)] hover:border-violet-200 hover:bg-violet-50 dark:hover:bg-violet-950/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-center"
         >
           {figmaLoading ? (
             <Loader2 className="w-5 h-5 text-purple-400 animate-spin" />
@@ -148,7 +148,7 @@ export default function ExportActions({
           type="button"
           onClick={handleDownloadZip}
           disabled={!hasOutput || zipLoading}
-          className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] hover:border-emerald-500/50 hover:bg-emerald-950/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-center"
+          className="flex flex-col items-center gap-1.5 p-3 rounded-xl border border-[var(--border)] bg-[var(--card-bg)] shadow-[var(--shadow-sm)] hover:border-emerald-200 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 transition-colors disabled:opacity-40 disabled:cursor-not-allowed text-center"
         >
           {zipLoading ? (
             <Loader2 className="w-5 h-5 text-emerald-400 animate-spin" />
@@ -163,12 +163,17 @@ export default function ExportActions({
         type="button"
         onClick={handleGitHub}
         disabled={!hasOutput || githubLoading}
-        className="mt-2 w-full flex items-center justify-center gap-2 py-2 text-xs rounded-lg border border-[var(--border)] text-[var(--text-muted)] hover:text-[var(--text-primary)] disabled:opacity-40 disabled:cursor-not-allowed"
+        className="mt-2 w-full flex items-center justify-center gap-2 py-2.5 text-xs rounded-lg border border-[var(--border)] bg-[var(--card-bg)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] shadow-[var(--shadow-sm)] disabled:opacity-40 disabled:cursor-not-allowed"
       >
         {githubLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Github className="w-3.5 h-3.5" />}
         {githubLoading ? "Exporting…" : "Push to GitHub Gist"}
       </button>
-      {message && <p className="text-[10px] text-accent-success mt-2 text-center">{message}</p>}
+      {message && (
+        <p className="text-[10px] text-[var(--success-text)] mt-2 text-center flex items-center justify-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-[var(--success)]" />
+          {message}
+        </p>
+      )}
     </div>
   );
 }
